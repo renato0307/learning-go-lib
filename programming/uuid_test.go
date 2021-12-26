@@ -6,9 +6,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var pf ProgrammingFunctions = ProgrammingFunctions{}
-
 func TestNewUuidWithHyphen(t *testing.T) {
+	var pf ProgrammingFunctions = ProgrammingFunctions{}
+
 	uuidWithHyphen := pf.NewUuid(false)
 
 	assert.Len(t, uuidWithHyphen, 36)
@@ -16,6 +16,8 @@ func TestNewUuidWithHyphen(t *testing.T) {
 }
 
 func TestNewUuidWithoutHyphen(t *testing.T) {
+	var pf ProgrammingFunctions = ProgrammingFunctions{}
+
 	uuidWithHyphen := pf.NewUuid(true)
 
 	assert.Len(t, uuidWithHyphen, 32)
