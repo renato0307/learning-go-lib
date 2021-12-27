@@ -57,6 +57,7 @@ func TestConvertCurrency(t *testing.T) {
 			"status": true
 		}
 	`
+
 	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, expected)
 	}))
