@@ -3,6 +3,7 @@ package finance
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -100,12 +101,9 @@ func (ff *FinanceFunctions) callLastCandleApi(from, to string) (fsaApiResponse, 
 		return response, err
 	}
 
-	defer httpResponse.Body.Close()
-
 	// reads and response and converts JSON string to a struct
-	body, err := ioutil.ReadAll(httpResponse.Body)
+	body, err := readBody(httpResponse.Body)
 	if err != nil {
-		err = fmt.Errorf("error reading the conversion data: %s", err.Error())
 		return response, err
 	}
 
@@ -115,5 +113,20 @@ func (ff *FinanceFunctions) callLastCandleApi(from, to string) (fsaApiResponse, 
 		return response, err
 	}
 
+	if len(response.Response) == 0 {
+		err = fmt.Errorf("invalid data returned for: %s", url)
+		return response, err
+	}
+
 	return response, nil
+}
+
+func readBody(bodyReader io.ReadCloser) ([]byte, error) {
+	defer bodyReader.Close()
+	body, err := ioutil.ReadAll(bodyReader)
+	if err != nil {
+		return []byte{}, fmt.Errorf("error reading the conversion data: %s", err.Error())
+	}
+
+	return body, nil
 }
